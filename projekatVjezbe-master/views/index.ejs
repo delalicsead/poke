@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJkRjblQCTtxA5q9ErHOLqL-Eo_Ce3NbA&callback=initMap"></script>
+
+    <script >
+      <!--  AJAX -->
+      var timer;
+      var sekunde = 2000;
+      var marker;
+      var map;
+
+      function  startTimer() {
+        timer = setInterval(function () {
+          console.log("Ajax pocetak");
+          $.ajax({
+            url: "/dajBroj"
+          }).done(function (data) {
+              console.info(data);
+              setMarkers(map, data.lat, data.lon);
+            console.log("Ajax kraj");
+          });
+        }, sekunde);
+      }
+
+      <!-- MAPA I MARKERI -->
+
+      function initMap() {
+        var centar = {lat: 43.856100, lng: 18.413893};
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: centar
+        });
+
+        marker = new google.maps.Marker({
+          position: centar,
+          map: map,
+          title: 'lat: ' + 43.854243 + ' : lng: ' + 18.414923
+        });
+      }
+
+      function setMarkers(map, a, b) {
+        marker.setMap(null);
+
+        marker = new google.maps.Marker({
+          position: {lat: a, lng: b},
+          map: map,
+          title: 'lat: ' + a + ' : lng: ' + b
+        });
+      }
+
+    </script>
+
+  </head>
+
+  <body>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <input type="button" value="Start tmer" onclick="startTimer()" style="width: 100%; height: 35px;"/>
+    <h1><%= value %></h1>
+  </body>
+</html>
